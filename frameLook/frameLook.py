@@ -30,4 +30,4 @@ def getFrame(cap,framenum,name):
     #cv.imshow("Video", img)
     #cv.waitKey(0)
 
-getFrame(vid,50,50)
+getFrame(vid,100,100)

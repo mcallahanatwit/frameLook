@@ -1,10 +1,10 @@
 import numpy as np
 import cv2 as cv
 import math
-from PIL import Image
+
 #to do the XY coordinates are wrong need to fix before doing polar crap the 
 #file format is (y,x) 720 pixels tall increasing going down, 1280 pixels wide increasing going right
-path = 'E:\\Users\\Michael\\OBSVid\\frameLook output\\frame50.jpg'
+path = 'E:\\Users\\Michael\\OBSVid\\frameLook output\\frame100.jpg'
 im = cv.imread(path)
 print(im.shape)
 def putMarker(img,x,y):
@@ -32,16 +32,32 @@ def findAngle(origin,pair1):
 def polarLoc(origin,theta,radius):
     x = radius*math.cos(theta)
     y = radius*math.sin(theta)   
-    x,y = -int(x)+origin[0],-int(y)+origin[1]    
+    if theta>0 :
+        x,y = int(x)+origin[0],int(y)+origin[1]   
+    elif theta<0 :
+        x,y = -int(x)+origin[0],-int(y)+origin[1]
+    else:
+        x,y = origin[0],int(y)+origin[1]
+    print("X: "+str(x)+" Y: "+str(y))
     return x,y
+def findArc(angle,radius):
+    arclength = angle*radius
+    return arclength
+def makeCircle(im,center,radius):
+    cv.circle(im,center,int(radius),(0,255,255),thickness=2)
 
-#im = putMarker(im,597,113)
-#im= putMarker(im,113,597)
+im = putMarker(im,597,113)
+#im= putMarker(im,775,500)
 #im = putMarker(im,380,482)
 r = findDist([597,113],[380,482])
+r1 = findDist([597,113],[775,500])
 angle = findAngle([597,113],[380,482])
+angle1 = findAngle([597,113],[775,500])
+xtest1,ytest1 = polarLoc([597,113],angle1,r)
+im = putMarker(im,xtest1,ytest1)
 xtest,ytest = polarLoc([597,113],angle,r)
 im = putMarker(im,xtest,ytest)
+makeCircle(im,(597,113),r)
 showIt(im)
 
 
