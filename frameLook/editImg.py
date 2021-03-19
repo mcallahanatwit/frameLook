@@ -4,9 +4,14 @@ import math
 
 #to do the XY coordinates are wrong need to fix before doing polar crap the 
 #file format is (y,x) 720 pixels tall increasing going down, 1280 pixels wide increasing going right
-path = 'E:\\Users\\Michael\\OBSVid\\frameLook output\\frame100.jpg'
-im = cv.imread(path)
-print(im.shape)
+path = 'E:\\Users\\Michael\\OBSVid\\frameLook output\\'
+outpath = 'E:\\Users\\Michael\\OBSVid\\frameLook output\\out\\'
+def simpLoadImg(path,framenum):
+    filename = str("frame"+str(framenum)+".jpg")
+    path1 = str(path+filename)
+    return cv.imread(path1),filename
+
+
 def putMarker(img,x,y):
     xbounds = [x-5,x+5] 
     ybounds = [y-5,y+5]
@@ -31,33 +36,71 @@ def findAngle(origin,pair1):
     return theta
 def polarLoc(origin,theta,radius):
     x = radius*math.cos(theta)
-    y = radius*math.sin(theta)   
-    if theta>0 :
-        x,y = int(x)+origin[0],int(y)+origin[1]   
-    elif theta<0 :
-        x,y = -int(x)+origin[0],-int(y)+origin[1]
+    y = radius*math.sin(theta) 
+    #print("Origin is: "+str(origin))
+    #print("UnShifted X: "+str(x)+" Y: "+str(y))
+    if x>0 and y>0:
+        x,y = int(x)+origin[0],int(y)+origin[1]
+    elif x>0 and y<0:
+        x,y = int(x)+origin[0],int(y)+origin[1]
+    elif x<0 and y>0:
+        x,y = int(x)+origin[0],int(y)+origin[1]
+    elif x<0 and y<0:
+        x,y = int(x)+origin[0],int(y)+origin[1]
     else:
         x,y = origin[0],int(y)+origin[1]
-    print("X: "+str(x)+" Y: "+str(y))
+    #print("Shifted X: "+str(x)+" Y: "+str(y))
+    
     return x,y
 def findArc(angle,radius):
     arclength = angle*radius
     return arclength
-def makeCircle(im,center,radius):
-    cv.circle(im,center,int(radius),(0,255,255),thickness=2)
+def makeQuasiCircle(im,center,radius):
+    cv.circle(im,center,int(radius-7),(255,255,255),thickness=-1)
+    cv.circle(im,center,int(radius+22),(255,255,0),thickness=25)
+def conArcArray(point1,point2,origin,samplecount):
+    angle1 = findAngle(origin,point1)
+    angle2 = findAngle(origin,point2)
+    angledelta = angle1-angle2
+    print("Angle1 :"+str(angle1)+" Angle2 :"+str(angle2)+" AngleDelta :"+str(angledelta))
+    theta = np.linspace(angle1,angle2,num=samplecount)
+    return theta
+    
+im,filename = simpLoadImg(path,79)
+print(im.shape)
+center = (490,540)
+point = (917,246)
+point1=(785,110)
+point2=(1020,560)
+im = putMarker(im,point2[0],point2[1])
+findAngle(center,point2)
+angle = findAngle(center,point)
+r = findDist(center,point)
+#makeQuasiCircle(im,center,r)
+#im = putMarker(im,point2[0],point2[1])
+im = putMarker(im,center[0],center[1])
+arcmat = conArcArray(point1,point2,center,500)
 
-im = putMarker(im,597,113)
-#im= putMarker(im,775,500)
-#im = putMarker(im,380,482)
-r = findDist([597,113],[380,482])
-r1 = findDist([597,113],[775,500])
-angle = findAngle([597,113],[380,482])
-angle1 = findAngle([597,113],[775,500])
-xtest1,ytest1 = polarLoc([597,113],angle1,r)
-im = putMarker(im,xtest1,ytest1)
-xtest,ytest = polarLoc([597,113],angle,r)
-im = putMarker(im,xtest,ytest)
-makeCircle(im,(597,113),r)
+def exportSeries(inpath,outpath,im,center,radius,startframe,endframe):
+    for x in range(startframe,endframe):
+        im,filename = simpLoadImg(inpath,x)
+        print(im.shape)
+        makeQuasiCircle(im,center,radius)
+        im = putMarker(im,center[0],center[1])
+        cv.imwrite(str(outpath+"out"+filename),im)
+
+#exportSeries(path,outpath,im,center,r,50,100)
+#thetaarr= conThetaVector(500,9)
+rarr = []
+garr = []
+barr = []
+colorarr =[]
+#for z in arcmat:
+ #   x,y = polarLoc(center,z,r)
+  #  rarr,garr,barr = np.append(rarr,im[y,x][2]),np.append(garr,im[y,x][1]),np.append(barr,im[y,x][0])
+#colorarr = (arcmat,rarr,garr,barr)
+#print(colorarr)
+#np.savetxt(outpath+'degreeRGBmatframe79.csv',colorarr,delimiter=',' ,fmt='%3f')
 showIt(im)
 
 
