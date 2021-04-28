@@ -66,20 +66,20 @@ def conArcArray(point1,point2,origin,samplecount):
     theta = np.linspace(angle1,angle2,num=samplecount)
     return theta
     
-im,filename = simpLoadImg(path,79)
-print(im.shape)
-center = (490,540)
-point = (917,246)
-point1=(785,110)
-point2=(1020,560)
-im = putMarker(im,point2[0],point2[1])
-findAngle(center,point2)
-angle = findAngle(center,point)
-r = findDist(center,point)
+#im,filename = simpLoadImg(path,79)
+#print(im.shape)
+#center = (490,540)
+#point = (917,246)
+#point1=(785,110)
+#point2=(1020,560)
+#im = putMarker(im,point2[0],point2[1])
+#findAngle(center,point2)
+#angle = findAngle(center,point)
+#r = findDist(center,point)
 #makeQuasiCircle(im,center,r)
 #im = putMarker(im,point2[0],point2[1])
-im = putMarker(im,center[0],center[1])
-arcmat = conArcArray(point1,point2,center,500)
+#im = putMarker(im,center[0],center[1])
+#arcmat = conArcArray(point1,point2,center,500)
 
 def exportSeries(inpath,outpath,im,center,radius,startframe,endframe):
     for x in range(startframe,endframe):
@@ -91,16 +91,16 @@ def exportSeries(inpath,outpath,im,center,radius,startframe,endframe):
 
 #exportSeries(path,outpath,im,center,r,50,100)
 #thetaarr= conThetaVector(500,9)
-rarr = []
-garr = []
-barr = []
-colorarr =[]
+#rarr = []
+#garr = []
+#barr = []
+#colorarr =[]
 #for z in arcmat:
  #   x,y = polarLoc(center,z,r)
   #  rarr,garr,barr = np.append(rarr,im[y,x][2]),np.append(garr,im[y,x][1]),np.append(barr,im[y,x][0])
 #colorarr = (arcmat,rarr,garr,barr)
 #print(colorarr)
 #np.savetxt(outpath+'degreeRGBmatframe79.csv',colorarr,delimiter=',' ,fmt='%3f')
-showIt(im)
+#showIt(im)
 
 

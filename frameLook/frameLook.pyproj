@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>e29f56e5-e399-4f58-a114-2e2713eb2b98</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>editImg.py</StartupFile>
+    <StartupFile>getColor.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -25,6 +25,24 @@
   <ItemGroup>
     <Compile Include="editImg.py" />
     <Compile Include="frameLook.py" />
+    <Compile Include="getColor.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="imageseg.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="locationFromMask.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="myglobal.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="plotOP.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="opDataGet.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
