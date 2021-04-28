@@ -2,13 +2,13 @@ import cv2 as cv
 import math
 import numpy as py
 
-samplepath = './armcsample.png'
+samplepath = './armc.png'
 clx=[]
 cly=[]
 sample = cv.imread(samplepath)
 height, width, channels = sample.shape 
-print("Height Is: "+str(height)+" Width is: "+str(width)+" Channels is: "+str(channels))
-print(sample[0][0])
+#print("Height Is: "+str(height)+" Width is: "+str(width)+" Channels is: "+str(channels))
+#print(sample[0][0])
 def selectSampleRange(baseim):
    
     def click_event(event,x,y,flags,params):
@@ -27,8 +27,7 @@ def selectSampleRange(baseim):
     cv.waitKey(0)
     cv.destroyAllWindows()
     pair1 = (clx[0],cly[0])
-    pair2 = (clx[1],cly[1])
-    print(pair1)
+    pair2 = (clx[1],cly[1])    
     return pair1,pair2
 def formatPair(p1,p2):
     xdiff = p2[0]-p1[0]
@@ -43,8 +42,8 @@ def formatPair(p1,p2):
         yrange = (p2[1],p1[1])
     return xrange,yrange
 def getSubImage(image,xrange,yrange):
-    print((xrange[0],yrange[0]))
-    print((xrange[1],yrange[1]))
+    #print((xrange[0],yrange[0]))
+    #print((xrange[1],yrange[1]))
     subim = image[yrange[0]:yrange[1],xrange[0]:xrange[1]]
     #print(subim)
     return subim
@@ -60,7 +59,7 @@ def readImg(path):
     return img
 def getDim(img):
     height, width, channels = img.shape
-    print("Height Is: "+str(height)+" Width is: "+str(width)+" Channels is: "+str(channels))
+    #print("Height Is: "+str(height)+" Width is: "+str(width)+" Channels is: "+str(channels))
     return height,width,channels
 def avgList(list):
     return sum(list)/len(list)
@@ -113,17 +112,33 @@ def colorGetter(path,hs,ss,vs):
     im1 = readImg(path)
     hsv = avgHSV(im1,hs,ss,vs)
     return hsv
+#avg color likely wont work much 
 def makeMaskLim(samplecolorimg):
     shift=15
     hsv = avgHSV(samplecolorimg,0,0,0)
-    upperthresh = (hsv[0]+shift+90,255,255)
-    lowerthresh = (hsv[0]-shift+90,50,50)
-    print(upperthresh)
-    print(lowerthresh)
-largeimg = cv.imread('./armc.png')
-daout = getSampleImg(largeimg)
-cv.imshow('Out',daout)
-cv.waitKey(0)
+    print("AVG HSV is: "+str(hsv))
+    if hsv[0]<10:
+        upperthresh = (hsv[0]+shift+160,255,255)
+        lowerthresh = (hsv[0]-shift+120,75,75) 
+    if hsv[0]>=10 and hsv[0]<90:
+        upperthresh = (hsv[0]+shift+20,255,255)
+        lowerthresh = (hsv[0]-shift,50,50) 
+    if hsv[0]>=90:
+        upperthresh = (hsv[0]+shift-90,255,255)
+        lowerthresh = (hsv[0]-shift-90,100,100)
+    
+    cv.imshow('Averaged',makeAvgImg(samplecolorimg,avgBGR(samplecolorimg,0)))
+    return upperthresh,lowerthresh
+def getMaskFromSubImg(fullimg):
+    
+    daout = getSampleImg(fullimg)   
+    cv.imshow('Out',daout)
+    ut,lt = makeMaskLim(daout)
+        
+    cv.waitKey(0)
+
+    return ut,lt
+#getMaskFromSubImg(sample)
 #imin = cv.imread(samplepath)
 #hsv1 = colorGetter(samplepath,0,0,0)
 #img1 = makeAvgImg(imin,hsv1)

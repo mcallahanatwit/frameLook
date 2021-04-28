@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>e29f56e5-e399-4f58-a114-2e2713eb2b98</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>getColor.py</StartupFile>
+    <StartupFile>imageseg.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
