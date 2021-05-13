@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>e29f56e5-e399-4f58-a114-2e2713eb2b98</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>imageseg.py</StartupFile>
+    <StartupFile>opDataGet.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -32,6 +32,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="locationFromMask.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MoveMask.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="myglobal.py">

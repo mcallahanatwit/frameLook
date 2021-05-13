@@ -11,7 +11,7 @@ cly =[]
 baseim = cv.imread('./armc.png')
 im1 = cv.imread('./outmasks/blue.jpg')
 im2 = cv.imread('./outmasks/blue.jpg')
-im3 = cv.imread('./outmasks/blue.jpg')
+im3 = cv.imread('./armc.png')
 def getDim(img):
     height, width, channels = img.shape
     print("Height Is: "+str(height)+" Width is: "+str(width)+" Channels is: "+str(channels))
@@ -102,7 +102,7 @@ positiveblue_y = []
 
 for x1 in range(0,len(b_x)):
     gc, rc = matchSum(b_x[x1],b_y[x1],length,finereso)
-    threshold = 50
+    threshold = 100
     if gc > threshold and rc > threshold:
         positiveblue_x.append(b_x[x1])
         positiveblue_y.append(b_y[x1])

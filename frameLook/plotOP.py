@@ -6,6 +6,7 @@ import math
 
 path = r"C:/Users\Micheal\Desktop\Openposeattempts\openpose\output_jsons"
 path2 = r"C:/Users\Micheal\Desktop\Openposeattempts\openpose\output"
+
 jointchart = ['0Nose','1Neck','2RShoulder','3RElbow','4RWrist','5LShoulder','6LElbow','7LWrist','8MidHip','9RHip','10RKnee','11RAnkle','12LHip','13LKnee','14LAnkle','15REye','16LEye','17REar','18LEar','19LBigToe','20LSmallToe','21LHeel','22RBigToe','23RSmallToe','24RHeel','25Background']
 
 def getFile(jointindx,path):

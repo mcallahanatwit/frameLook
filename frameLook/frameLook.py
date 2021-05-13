@@ -22,21 +22,24 @@ def loadVid(cap):
     cap.release()
     cv.destroyAllWindows()
     
-vid =getCap("E:\\Users\\Michael\\OBSVid\\lwks output\\full arm swing.mp4")
+#vid =getCap("E:\\Users\\Michael\\OBSVid\\lwks output\\full arm swing.mp4")
 
-def getFrame(cap,framenum,name,path):
+def getFrame(cap,framenum,name,outpath):
     print(cap.get(cv.CAP_PROP_FRAME_COUNT))
     cap.set(cv.CAP_PROP_POS_FRAMES,framenum)
     ret, img = cap.read()
-    cv.imwrite(path+"frame"+str(name)+".jpg",img)
+    cv.imwrite(outpath+"frame"+str(name)+".jpg",img)
     #cv.imshow("Video", img)
     #cv.waitKey(0)
+def makeFrames(cap,framearray,outpath):
+    for x in framearray:
+        getFrame(cap,x,x,outpath)
 def makeVid(startFrameNum,endFrameNum,path):
     out = cv.VideoWriter(str(outpath+'Output_video.avi'),cv.VideoWriter_fourcc(*'DIVX'),30,(1280,720))
     for x in range(startFrameNum,endFrameNum):
         img = cv.imread(path+'outframe'+str(x)+'.jpg')
         out.write(img)
     out.release()
-makeVid(50,100,outpath)
+#makeVid(50,100,outpath)
 #for x in range(50,100):
  #   getFrame(vid,x,x,path)
