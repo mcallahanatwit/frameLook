@@ -1,5 +1,5 @@
 import cv2 as cv
-workingdir = "./outmasks/"
+workingdir = "./framelook/outmasks/"
 bm = cv.imread(workingdir+'blue.jpg')
 gm = cv.imread(workingdir+'green.jpg')
 rm = cv.imread(workingdir+'red.jpg')

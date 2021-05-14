@@ -30,4 +30,4 @@ def dataOverTime(startF,endF,jointind,inpath,outpath):
 def processOverTime(startF,endF,inpath,outpath):
     for z in range(0,25):
         dataOverTime(startF,endF,z,path,path2)
-processOverTime(0,260,path,path2)
+#processOverTime(0,260,path,path2)
