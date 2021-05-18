@@ -66,13 +66,13 @@ def getCoords(joint,framenum,startframe,path):
     
     return (x,y)
 
-def findAngle(origin,pair1):
+def findAngle(origin,pair1,strname):
     
     offset = [-origin[0],-origin[1]]
     origin = np.add(origin,offset)
     relpair1 = np.add(pair1,offset)
     theta = (-math.atan(relpair1[1]/relpair1[0])+1*math.pi)*180/math.pi
-    print("Origin is: " +str(origin) + "| relative pair is "+str(relpair1)+"| Degree Theta is " +str(int(theta)))
+    print('For'+str(strname)+' Origin is: ' +str(origin) + "| relative pair is "+str(relpair1)+"| Degree Theta is " +str(int(theta)))
     return theta
 def rotCoord(pairlist,theta):
     dpair = pairlist
@@ -93,4 +93,20 @@ modlookframe = lookframe-startframe
 #c2=getCoords(desireW,modlookframe,startframe,path2)
 #findAngle(cO,c2)
 plotJoint(desire,apath)
-plotJointRotated(desire,apath,.78)
+#using vlaues extracted from graph
+rc = (504,-347)
+ri = (581,-441)
+re = (490,-221)
+fc = (476,-339)
+ff = (484,-60)
+fe = (310,-519)
+ac = (527,-341)
+ab = (539,-95)
+ad = (676,-510)
+findAngle(rc,ri,'Rot Internal')
+findAngle(rc,re,'Rot External')
+findAngle(fc,ff,'Flexion')
+findAngle(fc,fe,'Extension')
+findAngle(ac,ab,'Abduction')
+findAngle(ac,ad,'Adduction')
+#plotJointRotated(desire,apath,.78)
