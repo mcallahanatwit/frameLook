@@ -8,7 +8,7 @@ import cv2 as cv
 path = r"C:/Users\Micheal\Desktop\Openposeattempts\openpose\output_jsons"
 path2 = r"C:/Users\Micheal\Desktop\Openposeattempts\openpose\output"
 rotpath = r'./shoulderrom/rotation'
-abpath = r'./shoulderrom/abductionadduction'
+abpath = r'./rom/rsrom/rsromabad'
 flexpath = r'./shoulderrom/flexionextension'
 vrotpath = r'./shoulderrom/video/rotation.avi'
 vabpath = r'./shoulderrom/video/abductionadduction.avi'
@@ -110,16 +110,16 @@ def getMaxMinFrames(aglist):
     min_value = min(aglist)
     max_i = aglist.index(max_value)
     min_i = aglist.index(min_value)
-    print("Min Angle Frame: "+str(min_i+1)+' Degrees: '+str(min_value)+ ' | MAx Angle Frame:'+str(max_i+1)+' Degrees: '+str(max_value))
+    #print("Min Angle Frame: "+str(min_i+1)+' Degrees: '+str(min_value)+ ' | MAx Angle Frame:'+str(max_i+1)+' Degrees: '+str(max_value))
     return max_i,min_i
-def displayFrames(videopath,max_i,min_i,aglist,name):
+def displayFrames(videopath,max_i,min_i,aglist,name,shift):
     cap = cv.VideoCapture(videopath)
     cap.set(cv.CAP_PROP_POS_FRAMES,max_i)
     ret1, maxframe = cap.read()
     cap.set(cv.CAP_PROP_POS_FRAMES,min_i)
     ret2, minframe = cap.read()
-    cv.imshow(str(name)+' Max | Degrees:'+str(aglist[max_i]),maxframe)
-    cv.imshow(str(name)+' Min | Degrees:'+str(aglist[min_i]),minframe)
+    cv.imshow(str(name)+' Max | Degrees:'+str(aglist[max_i]+shift),maxframe)
+    cv.imshow(str(name)+' Min | Degrees:'+str(aglist[min_i]+shift),minframe)
     
 
 #desire = [3,4,2]

@@ -1,0 +1,1 @@
+START C:/Users/Micheal/Openpose/openpose/bin/OpenPoseDemo.exe --video C:/Users/Micheal/Openpose/openpose/examples/media/sromrot.mp4 --net_resolution -1x256 --write_json C:/Users/Micheal/Openpose/openpose/output_jsons --write_video C:/Users/Micheal/Openpose/openpose/outputv/sromrot.avi
