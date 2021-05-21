@@ -7,24 +7,20 @@ import math
 import cv2 as cv
 import os
 import subprocess as sp
+import myglobal as mglob
 
-opath = r'C:/Users/Micheal/Openpose/openpose/'
-opathbin = r'C:/Users/Micheal/Openpose/openpose/bin/OpenPoseDemo.exe'
 
-path = r"C:/Users/Micheal/openpose/openpose/output_jsons"
-path2 = r"C:/Users/Micheal/openpose/openpose/output"
-jointcomplexpath = './rom/rsrom/'
 
 
 jointchart = ['0Nose','1Neck','2RShoulder','3RElbow','4RWrist','5LShoulder','6LElbow','7LWrist','8MidHip','9RHip','10RKnee','11RAnkle','12LHip','13LKnee','14LAnkle','15REye','16LEye','17REar','18LEar','19LBigToe','20LSmallToe','21LHeel','22RBigToe','23RSmallToe','24RHeel','25Background']
 # isright = 1 if right, 0 if not
-def shoulderROM(dir,isright):
-    rotpath = dir+'rsromrot'
-    abpath = dir+'rsromabad'
-    flexpath = dir+'rsromflex'
-    vrotpath = dir+'rsromrotv.avi'
-    vabpath = dir+'rsromabadv.avi'
-    vflexpath = dir+'rsromflexv.avi'
+def shoulderROM(dir,rom,isright):
+    rotpath = dir+rom+'rot'
+    abpath = dir+rom+'abad'
+    flexpath = dir+rom+'flex'
+    vrotpath = dir+rom+'rotv.avi'
+    vabpath = dir+rom+'abadv.avi'
+    vflexpath = dir+rom+'flexv.avi'
     
     if isright == 1:
         flexlist = pOP.videoAngles(flexpath,2,4,0)
@@ -46,7 +42,15 @@ def shoulderROM(dir,isright):
     rv2 = rotlist[rmin]
     fstr = 'Flexion is : '+str(fv1)+'| Extension is : '+str(fv2)
     rstr = 'Internal Rotation is : '+str(rv2)+'| External Rotation is : '+str(rv1)
-    astr = 'Abduction is : '+str(av2)+'| Adduction is : '+str(av1)
+    astr = 'Abduction is : '+str(av1)+'| Adduction is : '+str(av2)
+    djson = {
+        "ROM Type":ROM,
+        "AbAd": {"Abduction": av1,"Adduction": av2},
+        "Rot": {"Internal Rotation":rv2,"External Rotation":rv1},
+        "Flex": {"Flexion":fv1,"Extension":fv2}            
+            }
+    with open(str(outpath1+'/'+rom+'/'+sname+'/out'+jointindx[n]+'.json'),'w') as f2:
+        json.dump(jsonout,f2)
     print(fstr)
     print(rstr)
     print(astr)
@@ -57,32 +61,32 @@ def shoulderROM(dir,isright):
 def runOP(rom,subrom):
     counter = 0
     vidtitle = rom+subrom
-    batstr = 'START C:/Users/Micheal/Openpose/openpose/bin/OpenPoseDemo.exe --video C:/Users/Micheal/Openpose/openpose/rawvid/'+rom+'/'+vidtitle+'.mp4 --net_resolution -1x256 --write_json C:/Users/Micheal/Openpose/openpose/output_jsons --write_video C:/Users/Micheal/source/repos/frameLook/frameLook/rom/'+rom+'/'+vidtitle+'v.avi'
+    batstr = 'START '+mglob.opathbin+' --video '+mglob.opath+'rawvid/'+rom+'/'+vidtitle+'.mp4 --net_resolution -1x256 --write_json '+mglob.outjson_path+' --write_video '+mglob.framelookpath+'rom/'+rom+'/'+vidtitle+'v.avi'
     
     #clean output folder
-    for f in os.listdir(path):
+    for f in os.listdir(mglob.outjson_path):
         #print(f)
-        os.remove(os.path.join(path,f))
+        os.remove(os.path.join(mglob.outjson_path,f))
     
-    batfile = open('C:/Users/Micheal/Openpose/openpose/runop.bat','w')
+    batfile = open(mglob.opath+'runop.bat','w')
     sstr = "cd \"%~dp0\"\n"
     batfile.write(sstr)
     batfile.write(batstr)
     batfile.close()
     print('we here')
-    #sp.run([opathbin,"--video=C:/Users/Micheal/Openpose/openpose/rawvids/"+rom+"/"+vidtitle+".mp4","--net_resolution= -1x256","--write_json=C:/Users/Micheal/Openpose/openpose/output_jsons", "--write_video=processed/"+rom+"/"+vidtitle+"v.avi"],cwd='C:/Users/Michael/Openpose/openpose')
-    sp.call('C:/Users/Micheal/Openpose/openpose/runop.bat')
+    sp.call(mglob.opath+'runop.bat')
     input("Wait until video is done please :")
     
     print('we pass')
-    for f in os.listdir(path):
+    for f in os.listdir(mglob.outjson_path):
         counter = counter+1
         print(counter)
-    procstr = 'C:/Users/Micheal/Openpose/openpose/processed/'+rom+'/'+vidtitle
-    dget.processOverTime(0,counter,path,procstr,rom,subrom)
+    procstr = mglob.opath+'processed/'+rom+'/'+vidtitle
+    dget.processOverTime(0,counter,mglob.outjson_path,procstr,rom,subrom)
 
 
-runOP('rsrom','flex')
-runOP('rsrom','rot')
-runOP('rsrom','abad')
-shoulderROM(jointcomplexpath,1)
+#runOP('lsrom','flex')
+#runOP('lsrom','rot')
+#runOP('lsrom','abad')
+jointcomplexpath = './rom/lsrom/'
+shoulderROM(jointcomplexpath,'lsrom',0)
