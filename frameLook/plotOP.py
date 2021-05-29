@@ -113,6 +113,7 @@ def getMaxMinFrames(aglist):
     #print("Min Angle Frame: "+str(min_i+1)+' Degrees: '+str(min_value)+ ' | MAx Angle Frame:'+str(max_i+1)+' Degrees: '+str(max_value))
     return max_i,min_i
 def displayFrames(videopath,max_i,min_i,aglist,name,shift):
+    
     cap = cv.VideoCapture(videopath)
     cap.set(cv.CAP_PROP_POS_FRAMES,max_i)
     ret1, maxframe = cap.read()

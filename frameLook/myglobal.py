@@ -1,6 +1,7 @@
 import cv2 as cv
 workingdir = "./framelook/outmasks/"
-opath = r'C:/Users/Micheal/Openpose/openpose/'
+#opath = r'C:/Users/Micheal/Openpose/openpose/'
+opath = r'C:/Users/callahanm5/Openpose/openpose/'
 opathbin = opath+'bin/OpenPoseDemo.exe'
 outjson_path = opath+'output_jsons'
 opathoutput = opath+'output'
