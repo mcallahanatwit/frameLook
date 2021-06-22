@@ -12,7 +12,7 @@ ap.add_argument("-v","--video",help="path to the video file")
 ap.add_argument("-a","--min_area", type=int, default=500, help="minimum area size")
 args = vars(ap.parse_args)
 print(args.get("min_area"))
-min_area_holder = 500
+min_area_holder = 5000
 #if no vid, then webcame
 if args.get("video", None) is None:
     vs = VideoStream(src=0).start()
@@ -74,7 +74,7 @@ while True:
 	# show the frame and record if the user presses a key
 	cv2.imshow("Security Feed", frame)
 	cv2.imshow("Thresh", thresh)
-	cv2.imshow("Frame Delta", frameDelta)
+	#cv2.imshow("Frame Delta", frameDelta)
 	key = cv2.waitKey(1) & 0xFF
 	# if the `q` key is pressed, break from the lop
 	if key == ord("q"):

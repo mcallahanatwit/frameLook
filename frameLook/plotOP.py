@@ -73,7 +73,7 @@ def getCoords(joint,framenum,startframe,path):
     return (x,y)
 
 def findAngle(origin,pair1,strname,flipperbool):
-    
+    print('The Angle pairs are: '+str(origin)+' and '+str(pair1))
     offset = [-origin[0],-origin[1]]
     origin = np.add(origin,offset)
     relpair1 = np.add(pair1,offset)
@@ -82,7 +82,7 @@ def findAngle(origin,pair1,strname,flipperbool):
         theta = (-math.atan2(relpair1[1],-relpair1[0]))*180/math.pi
     else:
         theta = (-math.atan2(relpair1[1],relpair1[0]))*180/math.pi
-    #print('For'+str(strname)+' Origin is: ' +str(origin) + "| relative pair is "+str(relpair1)+"| Degree Theta is " +str(int(theta)))
+    print('For'+str(strname)+' Origin is: ' +str(origin) + "| relative pair is "+str(relpair1)+"| Degree Theta is " +str(int(theta)))
     return theta
 def rotCoord(pairlist,theta):
     dpair = pairlist
@@ -105,6 +105,15 @@ def videoAngles(jpath,DESIRE_origin_joint,DESIRE_far_joint,flipperbool):
         angle = findAngle((xo[i],yo[i]),(xf[i],yf[i]),name,flipperbool)
         l1.append(angle)    
     return l1
+
+def imageAngles(i,jpath,DESIRE_origin_joint,DESIRE_far_joint,flipperbool):
+    xo,yo,co = getFile(DESIRE_origin_joint,jpath)
+    xf,yf,cf = getFile(DESIRE_far_joint,jpath)
+
+    name_arr = ['ab','ad','er','ir','fl','ex']
+    angle = findAngle((xo[i],yo[i]),(xf[i],yf[i]),name_arr[i],flipperbool)
+    return angle
+
 def getMaxMinFrames(aglist):
     max_value = max(aglist)
     min_value = min(aglist)
