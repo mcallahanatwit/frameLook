@@ -131,7 +131,11 @@ def displayFrames(videopath,max_i,min_i,aglist,name,shift):
     cv.imshow(str(name)+' Max | Degrees:'+str(aglist[max_i]+shift),maxframe)
     cv.imshow(str(name)+' Min | Degrees:'+str(aglist[min_i]+shift),minframe)
     
-
+def findFrame(videopath,framenum):
+    cap = cv.VideoCapture(videopath)
+    cap.set(cv.CAP_PROP_POS_FRAMES,framenum)
+    ret1, frame = cap.read()
+    return frame
 #desire = [3,4,2]
 #desireW = 4
 #desireS = 2

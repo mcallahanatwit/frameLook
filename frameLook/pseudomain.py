@@ -133,7 +133,7 @@ def shoulderROMFast(dir,rom,isright):
     print(rstr)
     print(astr)
     #shows the found frames and writes found values to image title
-    
+    dir = dir+rom+'/'
 
     abi = cv.imread(dir+'ab_rendered.png')
     adi = cv.imread(dir+'ad_rendered.png')
@@ -192,7 +192,7 @@ def runOPFast (rom):
     counter = 0
     #title = rom+subrom
     #the command in the bat file, starts openposedemo.exe on --video which points to the video path, --net_resolution resolution of model, --write_json json output, --write_video video output
-    batstr = 'START '+mglob.opathbin+' --image_dir '+mglob.opath+'rawimg/'+rom+'/ --net_resolution -1x256 --write_json '+mglob.outjson_path+' --write_images '+mglob.framelookpath+'romI/'
+    batstr = 'START '+mglob.opathbin+' --image_dir '+mglob.opath+'rawimg/'+rom+'/ --net_resolution -1x256 --write_json '+mglob.outjson_path+' --write_images '+mglob.framelookpath+'romI/'+rom+'/'
     
     #clean output folder
     for f in os.listdir(mglob.outjson_path):
@@ -217,17 +217,74 @@ def runOPFast (rom):
     subrom='hold'
     #from frame 0 to counter from mglob.outjson framelook output
     dget.processOverTimeFast(0,counter,mglob.outjson_path,rom)
+def lookThruVid(vidpath,outputpath):
+    x=1
+    framenum=1
+    while x==1:
+        img = pOP.findFrame(vidpath,framenum)
+        
+        cv.imshow('Frame is: '+str(framenum),img)
+        key = chr(cv.waitKey(0))
+        cv.destroyAllWindows()
+        if key == 'q':
+            print('End')
+            x=2
+        if key == '1':
+            print('Advance 1 Frame')
+            framenum=framenum+1
+        if key == '2':
+            print('Advance 5 Frames')
+            framenum=framenum+5
+        if key == '3':
+            print('Advance 25 Frames')
+            framenum=framenum+25
+        if key == '4':
+            print('Advance 50 Frames')
+            framenum=framenum+50
+        if key == '5':
+            print('Back 1 Frame')
+            framenum=framenum-1
+        if key == '6':
+            print('Back 5 Frames')
+            framenum=framenum-5
+        if key == '7':
+            print('Back 25 Frames')
+            framenum=framenum-25
+        if key == '8':
+            print('Back 50 Frames')
+            framenum=framenum-50
+        if key == 's':
+            name = str(input('Enter name to save as: '))
+            string1 = str(outputpath)+str(name)+'.png'
+            cv.imwrite(string1,img)
+            print(string1)
+
+
+
 
 #runs OP for one motion type and for three different videos.lsrom + flex, rot and abad are video names to process
-
+jointcomplexpath1 = './framelook/romI/'
+routput = 'C:/Users/callahanm5/Openpose/openpose/rawimg/test/'
+vidpath = './framelook/vid/'
+file = vidpath+'test.mp4'
 #runOP('lsrom','flex')
 #runOP('lsrom','rot')
 #runOP('lsrom','abad')
-#runOPFast('lsrom')
+#lookThruVid(file,routput)
+runOPFast('test')
 #paths to each rom data sets
 #jointcomplexpath = './framelook/rom/rsrom/'
-#jointcomplexpath1 = './framelook/rom/lsrom/'
-jointcomplexpath1 = './framelook/romI/'
+#jointcomplexpath1 = './framelook/rom/'
+
+
+#print(file)
+
+#imt = pOP.findFrame(file,50)
+#print(imt)
+#cv.imshow('test',imt)
+#key=cv.waitKey(0)
+#print(chr(key))
+
 #takes the reformated OP output, selects a path, joint rom and boolean flipper and autodetects extreme joint angles
-shoulderROMFast(jointcomplexpath1,'lsrom',0)
+shoulderROMFast(jointcomplexpath1,'test',0)
 #shoulderROM(jointcomplexpath1,'lsrom',0)
