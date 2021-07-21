@@ -8,6 +8,7 @@ import cv2 as cv
 import os
 import subprocess as sp
 import myglobal as mglob
+import editImg as eim
 
 #to do: use location from mask to determine max and min angles, then run openpose on them, or use a microphone to trigger a snapshot
 
@@ -80,7 +81,7 @@ def shoulderROM(dir,rom,isright):
 
 def shoulderROMFast(dir,rom,isright):
     #paths to various folders
-    ipath=dir+rom
+    ipath=dir+rom+'/'
     rotpath = dir+rom+'rot'
     abpath = dir+rom+'abad'
     flexpath = dir+rom+'flex'
@@ -90,29 +91,44 @@ def shoulderROMFast(dir,rom,isright):
     #selects the right shoulder or elbow and wrist. and if last value = 1 rotates cooridnate system by 180
     #name_arr = ['ab','ad','er','ir','fl','ex']
     if isright == 1:
-        amax =pOP.imageAngles(0,ipath,2,4,1)
-        amin =pOP.imageAngles(1,ipath,2,4,1)
-        rmax =pOP.imageAngles(2,ipath,3,4,0)
-        rmin =pOP.imageAngles(3,ipath,3,4,0)
-        fmax = pOP.imageAngles(4,ipath,2,4,0)
-        fmix = pOP.imageAngles(5,ipath,2,4,0)
+        amax, pairs1 =pOP.imageAngles(0,ipath,2,4,1)
+        amin, pairs2 =pOP.imageAngles(1,ipath,2,4,1)
+        rmax, pairs3 =pOP.imageAngles(2,ipath,3,4,0)
+        rmin,pairs4 =pOP.imageAngles(3,ipath,3,4,0)
+        fmax,pairs5 = pOP.imageAngles(4,ipath,2,4,0)
+        fmin,pairs6 = pOP.imageAngles(5,ipath,2,4,0)
     #selects the left shoulder or elbow and wrist.
     else:
-        amax =pOP.imageAngles(0,ipath,5,7,0)
-        amin =pOP.imageAngles(1,ipath,5,7,0)
-        rmax =pOP.imageAngles(2,ipath,6,7,1)
-        rmin =pOP.imageAngles(3,ipath,6,7,1)
-        fmax = pOP.imageAngles(4,ipath,5,7,1)
-        fmin = pOP.imageAngles(5,ipath,5,7,1)
+        amax, pairs1 =pOP.imageAngles(0,ipath,5,7,0)
+        amin, pairs2 =pOP.imageAngles(1,ipath,5,7,0)
+        rmax, pairs3 =pOP.imageAngles(2,ipath,6,7,1)
+        rmin, pairs4 =pOP.imageAngles(3,ipath,6,7,1)
+        fmax, pairs5 = pOP.imageAngles(4,ipath,5,7,1)
+        fmin, pairs6 = pOP.imageAngles(5,ipath,5,7,1)
     #index of frame array, selects the max and min angle from horizontal 
+    abi = cv.imread(ipath+'ab_rendered.png') 
+    adi = cv.imread(ipath+'ad_rendered.png')
+    eri = cv.imread(ipath+'er_rendered.png')
+    iri = cv.imread(ipath+'ir_rendered.png')
+    fli = cv.imread(ipath+'fl_rendered.png')
+    exi = cv.imread(ipath+'ex_rendered.png')
     
-    #adjust found angles to be in range normally reported for the specific measurment
-    fv1 = fmax+90
-    fv2 = fmin+90
-    av1 = amax+90
-    av2 = amin+90
-    rv1 = rmax
-    rv2 = rmin
+    abi=eim.drawArc(abi,pairs1[0],pairs1[1],amax*math.pi/180-math.pi/2,.5*math.pi)
+    adi=eim.drawArc(adi,pairs2[0],pairs2[1],amin*math.pi/180+math.pi*3/4,.5*math.pi)
+    eri=eim.drawArc(eri,pairs3[0],pairs3[1],rmax*math.pi/180-math.pi/2,-math.pi)
+    iri=eim.drawArc(iri,pairs4[0],pairs4[1],rmin*math.pi/180+math.pi/2,math.pi)
+    fli=eim.drawArc(fli,pairs5[0],pairs5[1],fmax*math.pi/180-math.pi/2,.5*math.pi)
+    exi=eim.drawArc(exi,pairs6[0],pairs6[1],fmin*math.pi/180+math.pi/8,.5*math.pi)
+    
+    #convert to degree
+    
+    fv1 = fmax*180/math.pi +90  
+    fv2 = fmin*180/math.pi +90  
+    av1 = amax*180/math.pi +90  
+    av2 = amin*180/math.pi +90  
+    rv1 = rmax*180/math.pi   
+    rv2 = rmin*180/math.pi   
+        
     #formatting output
     fstr = 'Flexion is : '+str(fv1)+'| Extension is : '+str(fv2)
     rstr = 'Internal Rotation is : '+str(rv2)+'| External Rotation is : '+str(rv1)
@@ -135,19 +151,15 @@ def shoulderROMFast(dir,rom,isright):
     #shows the found frames and writes found values to image title
     dir = dir+rom+'/'
 
-    abi = cv.imread(dir+'ab_rendered.png')
-    adi = cv.imread(dir+'ad_rendered.png')
-    eri = cv.imread(dir+'er_rendered.png')
-    iri = cv.imread(dir+'ir_rendered.png')
-    fli = cv.imread(dir+'fl_rendered.png')
-    exi = cv.imread(dir+'ex_rendered.png')
-    shift=90
-    cv.imshow('Abduction Max | Degrees:'+str(amax+shift),abi)
-    cv.imshow('Abduction Min | Degrees:'+str(amin+shift),adi)
-    cv.imshow('Rotation Max | Degrees:'+str(rmax),eri)
-    cv.imshow('Rotation Min | Degrees:'+str(rmin),iri)
-    cv.imshow('Flexion Max | Degrees:'+str(fmax+shift),fli)
-    cv.imshow('Flexion Min | Degrees:'+str(fmin+shift),exi)
+    
+    
+    
+    cv.imshow('Abduction Max | Degrees:'+str(av1),abi)
+    cv.imshow('Abduction Min | Degrees:'+str(av2),adi)
+    cv.imshow('Rotation Max | Degrees:'+str(rv1),eri)
+    cv.imshow('Rotation Min | Degrees:'+str(rv2),iri)
+    cv.imshow('Flexion Max | Degrees:'+str(fv1),fli)
+    cv.imshow('Flexion Min | Degrees:'+str(fv2),exi)
 
     cv.waitKey(0)
 
@@ -217,64 +229,94 @@ def runOPFast (rom):
     subrom='hold'
     #from frame 0 to counter from mglob.outjson framelook output
     dget.processOverTimeFast(0,counter,mglob.outjson_path,rom)
-def lookThruVid(vidpath,outputpath):
+def lookThruVid(vidpath,outputpath,iswebcam):
     x=1
     framenum=1
-    while x==1:
-        img = pOP.findFrame(vidpath,framenum)
-        
-        cv.imshow('Frame is: '+str(framenum),img)
-        key = chr(cv.waitKey(0))
+    print("Enter s to save frame, q to quit")
+    if iswebcam==True:
+        # define a video capture object
+        vid = cv.VideoCapture(0)  
+        while(True):      
+            # Capture the video frame
+            # by frame
+            ret, frame = vid.read()
+  
+            # Display the resulting frame
+            cv.imshow('Webcam', frame)
+      
+            # the 'q' button is set as the
+            # quitting button you may use any
+            # desired button of your choice
+            
+            if cv.waitKey(1) == ord('s'):
+                name = str(input('Enter name to save as: '))
+                string1 = str(outputpath)+str(name)+'.png'
+                cv.imwrite(string1,frame)
+                print(string1)
+            if cv.waitKey(1) == ord('q'):
+                break
+  
+        # After the loop release the cap object
+        vid.release()
+        # Destroy all the windows
         cv.destroyAllWindows()
-        if key == 'q':
-            print('End')
-            x=2
-        if key == '1':
-            print('Advance 1 Frame')
-            framenum=framenum+1
-        if key == '2':
-            print('Advance 5 Frames')
-            framenum=framenum+5
-        if key == '3':
-            print('Advance 25 Frames')
-            framenum=framenum+25
-        if key == '4':
-            print('Advance 50 Frames')
-            framenum=framenum+50
-        if key == '5':
-            print('Back 1 Frame')
-            framenum=framenum-1
-        if key == '6':
-            print('Back 5 Frames')
-            framenum=framenum-5
-        if key == '7':
-            print('Back 25 Frames')
-            framenum=framenum-25
-        if key == '8':
-            print('Back 50 Frames')
-            framenum=framenum-50
-        if key == 's':
-            name = str(input('Enter name to save as: '))
-            string1 = str(outputpath)+str(name)+'.png'
-            cv.imwrite(string1,img)
-            print(string1)
+    else:
+        while x==1:
+            img = pOP.findFrame(vidpath,framenum)
+        
+            cv.imshow('Frame is: '+str(framenum),img)
+            key = chr(cv.waitKey(0))
+            cv.destroyAllWindows()
+            if key == 'q':
+                print('End')
+                x=2
+            if key == '1':
+                print('Advance 1 Frame')
+                framenum=framenum+1
+            if key == '2':
+                print('Advance 5 Frames')
+                framenum=framenum+5
+            if key == '3':
+                print('Advance 25 Frames')
+                framenum=framenum+25
+            if key == '4':
+                print('Advance 50 Frames')
+                framenum=framenum+50
+            if key == '5':
+                print('Back 1 Frame')
+                framenum=framenum-1
+            if key == '6':
+                print('Back 5 Frames')
+                framenum=framenum-5
+            if key == '7':
+                print('Back 25 Frames')
+                framenum=framenum-25
+            if key == '8':
+                print('Back 50 Frames')
+                framenum=framenum-50
+            if key == 's':
+                name = str(input('Enter name to save as: '))
+                string1 = str(outputpath)+str(name)+'.png'
+                cv.imwrite(string1,img)
+                print(string1)
 
 
 
 
 #runs OP for one motion type and for three different videos.lsrom + flex, rot and abad are video names to process
 jointcomplexpath1 = './framelook/romI/'
-routput = 'C:/Users/callahanm5/Openpose/openpose/rawimg/test/'
+routput = 'C:/Users/callahanm5/Openpose/openpose/rawimg/test1/'
 vidpath = './framelook/vid/'
 file = vidpath+'test.mp4'
+
 #runOP('lsrom','flex')
 #runOP('lsrom','rot')
 #runOP('lsrom','abad')
-#lookThruVid(file,routput)
-runOPFast('test')
+#lookThruVid(file,routput,True)
+#runOPFast('test')
 #paths to each rom data sets
 #jointcomplexpath = './framelook/rom/rsrom/'
-#jointcomplexpath1 = './framelook/rom/'
+#jointcomplexpath1 = './framelook/romI/'
 
 
 #print(file)
@@ -286,5 +328,7 @@ runOPFast('test')
 #print(chr(key))
 
 #takes the reformated OP output, selects a path, joint rom and boolean flipper and autodetects extreme joint angles
-shoulderROMFast(jointcomplexpath1,'test',0)
+#isright = int(input("1 for Right| 0 for left"))
+isright=0
+shoulderROMFast(jointcomplexpath1,'test',isright)
 #shoulderROM(jointcomplexpath1,'lsrom',0)

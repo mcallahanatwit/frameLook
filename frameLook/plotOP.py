@@ -72,6 +72,11 @@ def getCoords(joint,framenum,startframe,path):
     
     return (x,y)
 
+def getDist(p1,p2):
+    xdiff = p1[0]-p2[0]
+    ydiff = p1[1]-p2[1]
+    return math.sqrt(xdiff*xdiff+ydiff*ydiff)
+
 def findAngle(origin,pair1,strname,flipperbool):
     print('The Angle pairs are: '+str(origin)+' and '+str(pair1))
     offset = [-origin[0],-origin[1]]
@@ -79,9 +84,9 @@ def findAngle(origin,pair1,strname,flipperbool):
     relpair1 = np.add(pair1,offset)
     if flipperbool ==1 :
         #print("we here")
-        theta = (-math.atan2(relpair1[1],-relpair1[0]))*180/math.pi
+        theta = (-math.atan2(relpair1[1],-relpair1[0]))
     else:
-        theta = (-math.atan2(relpair1[1],relpair1[0]))*180/math.pi
+        theta = (-math.atan2(relpair1[1],relpair1[0]))
     print('For'+str(strname)+' Origin is: ' +str(origin) + "| relative pair is "+str(relpair1)+"| Degree Theta is " +str(int(theta)))
     return theta
 def rotCoord(pairlist,theta):
@@ -109,10 +114,18 @@ def videoAngles(jpath,DESIRE_origin_joint,DESIRE_far_joint,flipperbool):
 def imageAngles(i,jpath,DESIRE_origin_joint,DESIRE_far_joint,flipperbool):
     xo,yo,co = getFile(DESIRE_origin_joint,jpath)
     xf,yf,cf = getFile(DESIRE_far_joint,jpath)
-
+    FandOpairs = ((xf[i],yf[i]),(xo[i],yo[i]))
     name_arr = ['ab','ad','er','ir','fl','ex']
     angle = findAngle((xo[i],yo[i]),(xf[i],yf[i]),name_arr[i],flipperbool)
-    return angle
+    print('Angle is: '+str(angle*180/math.pi))
+    return angle, FandOpairs
+
+def findGroundLinePoint(origin,distance,radian):
+    xnew = int(distance*math.cos(radian)+origin[0])
+    ynew = int(distance*math.sin(radian)+origin[1])
+    print((xnew,ynew))
+    #return(int(origin[0]),int(origin[1]))
+    return (xnew,ynew)
 
 def getMaxMinFrames(aglist):
     max_value = max(aglist)

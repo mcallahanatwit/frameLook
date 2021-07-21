@@ -16,7 +16,20 @@ def putMarker(img,x,y):
     xbounds = [x-5,x+5] 
     ybounds = [y-5,y+5]
     img[ybounds[0]:ybounds[1], xbounds[0]:xbounds[1]] = [255,255,0]
+    #cv.imshow('frame',img)
+    #cv.waitKey(0)
     return img
+def drawArc(img,farpoint,origin,far_angle,gl_angle):
+    dist = findDist(farpoint,origin)
+    print('Far angle is: '+str(far_angle)+' gl angle is: '+str(gl_angle))
+    angle_arr = np.linspace(far_angle,gl_angle,20)
+    #angle_arr = np.linspace(gl_angle,far_angle,20)
+    for z in angle_arr:
+        x_gl = int(dist*math.cos(z)+origin[0])
+        y_gl = int(dist*math.sin(z)+origin[1])
+        img = putMarker(img,x_gl,y_gl)
+    return img
+    
 def showIt(im):
     cv.imshow("Video", im)
     cv.waitKey(0)
