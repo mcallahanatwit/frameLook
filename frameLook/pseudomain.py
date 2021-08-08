@@ -163,6 +163,21 @@ def shoulderROMFast(dir,rom,isright):
 
     cv.waitKey(0)
 
+def angleFast(dir,foldername):
+    ipath=dir+foldername+'/'
+    demo_img = cv.imread(ipath+'demo_rendered.png')
+    print(jointchart)    
+    cv.imshow('Demo',demo_img)
+    cv.waitKey(0)
+    d_o = int(input('Enter Origin Joint Index 0-24: '))
+    d_f = int(input('Enter Origin Joint Index 0-24: '))
+    d_d = input('Axes Direction u , d , l , r , up down left right respectively: ')
+    
+    demopath = dir+foldername    
+    d_out=pOP.demoAngles(demopath,d_o,d_f,d_d)
+    cv.imshow('Angle is: '+str(d_out),demo_img)
+    cv.waitKey(0)
+    
 #runOP to be run on raw video and extract anatomical locations, and format into a more friendly format
 #rom : name of the joint rom like lsrom or rsrom
 #subrom : name of the sub motion, specific for each joint. for the shoulder 'flex', 'abad', and 'rot' represent the three motions that make up the joint rom
@@ -200,6 +215,7 @@ def runOP(rom,subrom):
     dget.processOverTime(0,counter,mglob.outjson_path,procstr,rom,subrom)
 
 def runOPFast (rom):
+
 #counter counts the number of frames in the video
     counter = 0
     #title = rom+subrom
@@ -227,34 +243,37 @@ def runOPFast (rom):
         counter = counter+1
         print(counter)
     subrom='hold'
-    #from frame 0 to counter from mglob.outjson framelook output
-    dget.processOverTimeFast(0,counter,mglob.outjson_path,rom)
+    #from frame 0 to counter from mglob.outjson framelook output 
+    dget.processOverTimeFast(0,counter,mglob.outjson_path,rom,1)
 def lookThruVid(vidpath,outputpath,iswebcam):
     x=1
     framenum=1
     print("Enter s to save frame, q to quit")
     if iswebcam==True:
         # define a video capture object
-        vid = cv.VideoCapture(0)  
-        while(True):      
+        vid = cv.VideoCapture(0)
+        z1=1
+        while(z1==1):      
+            
             # Capture the video frame
             # by frame
             ret, frame = vid.read()
   
             # Display the resulting frame
             cv.imshow('Webcam', frame)
-      
+            key = cv.waitKey(30)
             # the 'q' button is set as the
             # quitting button you may use any
             # desired button of your choice
             
-            if cv.waitKey(1) == ord('s'):
+            if key == ord('q'):
+                z1=0
+            if key == ord('s'):
                 name = str(input('Enter name to save as: '))
                 string1 = str(outputpath)+str(name)+'.png'
                 cv.imwrite(string1,frame)
                 print(string1)
-            if cv.waitKey(1) == ord('q'):
-                break
+            
   
         # After the loop release the cap object
         vid.release()
@@ -305,15 +324,15 @@ def lookThruVid(vidpath,outputpath,iswebcam):
 
 #runs OP for one motion type and for three different videos.lsrom + flex, rot and abad are video names to process
 jointcomplexpath1 = './framelook/romI/'
-routput = 'C:/Users/callahanm5/Openpose/openpose/rawimg/test1/'
+routput = 'C:/Users/callahanm5/Openpose/openpose/rawimg/test3/'
 vidpath = './framelook/vid/'
 file = vidpath+'test.mp4'
 
 #runOP('lsrom','flex')
 #runOP('lsrom','rot')
 #runOP('lsrom','abad')
-#lookThruVid(file,routput,True)
-#runOPFast('test')
+lookThruVid(file,routput,True)
+runOPFast('test3')
 #paths to each rom data sets
 #jointcomplexpath = './framelook/rom/rsrom/'
 #jointcomplexpath1 = './framelook/romI/'
@@ -330,5 +349,6 @@ file = vidpath+'test.mp4'
 #takes the reformated OP output, selects a path, joint rom and boolean flipper and autodetects extreme joint angles
 #isright = int(input("1 for Right| 0 for left"))
 isright=0
-shoulderROMFast(jointcomplexpath1,'test',isright)
+angleFast(jointcomplexpath1,'test3')
+#shoulderROMFast(jointcomplexpath1,'test',isright)
 #shoulderROM(jointcomplexpath1,'lsrom',0)

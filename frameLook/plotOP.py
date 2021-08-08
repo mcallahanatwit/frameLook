@@ -82,11 +82,13 @@ def findAngle(origin,pair1,strname,flipperbool):
     offset = [-origin[0],-origin[1]]
     origin = np.add(origin,offset)
     relpair1 = np.add(pair1,offset)
-    if flipperbool ==1 :
-        #print("we here")
+    if flipperbool == False :
+        print("we here")
         theta = (-math.atan2(relpair1[1],-relpair1[0]))
-    else:
-        theta = (-math.atan2(relpair1[1],relpair1[0]))
+        
+    if flipperbool == True:
+        theta = (math.atan2(-relpair1[1],relpair1[0]))
+        print('wack')
     print('For'+str(strname)+' Origin is: ' +str(origin) + "| relative pair is "+str(relpair1)+"| Degree Theta is " +str(int(theta)))
     return theta
 def rotCoord(pairlist,theta):
@@ -119,7 +121,42 @@ def imageAngles(i,jpath,DESIRE_origin_joint,DESIRE_far_joint,flipperbool):
     angle = findAngle((xo[i],yo[i]),(xf[i],yf[i]),name_arr[i],flipperbool)
     print('Angle is: '+str(angle*180/math.pi))
     return angle, FandOpairs
-
+def demoAngles(jpath,origin_joint,far_joint,direction):
+    xo,yo,co = getFile(origin_joint,jpath)
+    xf,yf,cf = getFile(far_joint,jpath)
+    i=0
+    name_arr = ['demo']
+    flbool=True
+    if origin_joint in [5,6,7,12,13,14,19,20,21]:
+        print('test1')
+        flbool=False
+    else:
+        print('test2')
+        flipperbool= True
+    
+    if direction=='u':
+        shiftx=0
+        shifty=30
+        
+    elif direction=='d':
+        shiftx=0
+        shifty=-30
+        flipperbool= not flbool
+    elif direction=='l':
+        shiftx=30
+        shifty=0 
+        
+    elif direction=='r':
+        print('here')
+        shiftx=-30
+        shifty=0
+        flipperbool= not flipperbool
+    angle = findAngle((xo[i],yo[i]),(xf[i],yf[i]),name_arr[i],flipperbool)
+    print(flipperbool)   
+    
+    groundlinepair = (xo[i]+shiftx,yo[i]-shifty)
+    angle1 = findAngle((xo[i],yo[i]),groundlinepair,name_arr[i],flipperbool)
+    return angle-angle1
 def findGroundLinePoint(origin,distance,radian):
     xnew = int(distance*math.cos(radian)+origin[0])
     ynew = int(distance*math.sin(radian)+origin[1])

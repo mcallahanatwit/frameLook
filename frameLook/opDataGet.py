@@ -33,7 +33,7 @@ def dataOverTime(startF,endF,jointind,inpath,rom,subrom):
     with open(str(outpath1+'/'+rom+'/'+sname+'/out'+jointindx[n]+'.json'),'w') as f2:
         json.dump(jsonout,f2)
 
-def dataOverTimeFast(startF,endF,jointind,inpath,rom):
+def dataOverTimeFast(startF,endF,jointind,inpath,rom,isdemo):
     #outpath1 = 'C:/Users/Micheal/source/repos/frameLook/frameLook/romI'
     outpath1 = 'C:/Users/callahanm5/source/repos/frameLook/frameLook/romI'
     n = jointind
@@ -43,7 +43,10 @@ def dataOverTimeFast(startF,endF,jointind,inpath,rom):
     jsonout = {}
     confidencearr = []
     kp = '_keypoints.json'
-    name_arr = ['ab'+kp,'ad'+kp,'er'+kp,'ir'+kp,'fl'+kp,'ex'+kp]
+    if isdemo==1:
+        name_arr = ['demo'+kp]
+    else:
+        name_arr = ['ab'+kp,'ad'+kp,'er'+kp,'ir'+kp,'fl'+kp,'ex'+kp]
     for x in name_arr:
         #print(x)
         strname = inpath+'/'+x
@@ -61,11 +64,11 @@ def dataOverTimeFast(startF,endF,jointind,inpath,rom):
     
     with open(str(outpath1+'/'+rom+'/out'+jointindx[n]+'.json'),'w') as f2:
         json.dump(jsonout,f2)    
-def processOverTime(startF,endF,inpath,outpath,rom,subrom):
+def processOverTime(startF,endF,inpath,outpath,rom,subrom,isdemo):
     for z in range(0,25):
-        dataOverTime(startF,endF,z,path,outpath,rom,subrom)
+        dataOverTime(startF,endF,z,path,outpath,rom,subrom,isdemo)
 
-def processOverTimeFast(startF,endF,inpath,rom):
+def processOverTimeFast(startF,endF,inpath,rom,isdemo):
     for z in range(0,25):
-        dataOverTimeFast(startF,endF,z,path,rom)
+        dataOverTimeFast(startF,endF,z,path,rom,isdemo)
 #processOverTime(0,260,path,path2)
