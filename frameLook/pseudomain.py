@@ -172,10 +172,16 @@ def angleFast(dir,foldername):
     d_o = int(input('Enter Origin Joint Index 0-24: '))
     d_f = int(input('Enter Origin Joint Index 0-24: '))
     d_d = input('Axes Direction u , d , l , r , up down left right respectively: ')
-    
+    #d_o = 5 ; d_f=6 ; d_d = 'd'
     demopath = dir+foldername    
-    d_out=pOP.demoAngles(demopath,d_o,d_f,d_d)
-    cv.imshow('Angle is: '+str(d_out),demo_img)
+    d_out,pair_o,pair_f,pair_gl=pOP.demoAngles(demopath,d_o,d_f,d_d)
+    print(pair_o)
+    cv.line(demo_img,pair_f,pair_o,(0,0,0),8)
+    cv.line(demo_img,pair_gl,pair_o,(0,0,0),8)
+    d_out1 = abs(d_out)
+    d_out2 = 2*math.pi - d_out1
+    print(2*math.pi)
+    cv.imshow('Angle is: '+str(d_out1*180/math.pi)+' Or: '+str(d_out2*180/math.pi),demo_img)
     cv.waitKey(0)
     
 #runOP to be run on raw video and extract anatomical locations, and format into a more friendly format

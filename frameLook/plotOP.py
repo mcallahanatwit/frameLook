@@ -125,8 +125,7 @@ def demoAngles(jpath,origin_joint,far_joint,direction):
     xo,yo,co = getFile(origin_joint,jpath)
     xf,yf,cf = getFile(far_joint,jpath)
     i=0
-    name_arr = ['demo']
-    flbool=True
+    name_arr = ['demo']    
     if origin_joint in [5,6,7,12,13,14,19,20,21]:
         print('test1')
         flbool=False
@@ -136,27 +135,27 @@ def demoAngles(jpath,origin_joint,far_joint,direction):
     
     if direction=='u':
         shiftx=0
-        shifty=30
+        shifty=100
         
     elif direction=='d':
         shiftx=0
-        shifty=-30
-        flipperbool= not flbool
+        shifty=-100
+        
     elif direction=='l':
-        shiftx=30
+        shiftx=100
         shifty=0 
         
-    elif direction=='r':
-        print('here')
-        shiftx=-30
+    elif direction=='r':        
+        shiftx=-100
         shifty=0
-        flipperbool= not flipperbool
-    angle = findAngle((xo[i],yo[i]),(xf[i],yf[i]),name_arr[i],flipperbool)
-    print(flipperbool)   
+        
+    angle = findAngle((xo[i],yo[i]),(xf[i],yf[i]),name_arr[i],True)
+       
     
     groundlinepair = (xo[i]+shiftx,yo[i]-shifty)
     angle1 = findAngle((xo[i],yo[i]),groundlinepair,name_arr[i],flipperbool)
-    return angle-angle1
+    pair_o = (int(xo[i]),int(yo[i])) ; pair_f = (int(xf[i]),int(yf[i])); groundlinepair = (int(xo[i]+shiftx),int(yo[i]-shifty))
+    return angle-angle1, pair_o, pair_f, groundlinepair
 def findGroundLinePoint(origin,distance,radian):
     xnew = int(distance*math.cos(radian)+origin[0])
     ynew = int(distance*math.sin(radian)+origin[1])
