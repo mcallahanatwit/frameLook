@@ -170,7 +170,7 @@ def angleFast(dir,foldername):
     cv.imshow('Demo',demo_img)
     cv.waitKey(0)
     d_o = int(input('Enter Origin Joint Index 0-24: '))
-    d_f = int(input('Enter Origin Joint Index 0-24: '))
+    d_f = int(input('Enter Far Joint Index 0-24: '))
     d_d = input('Axes Direction u , d , l , r , up down left right respectively: ')
     #d_o = 5 ; d_f=6 ; d_d = 'd'
     demopath = dir+foldername    

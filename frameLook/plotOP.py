@@ -126,6 +126,7 @@ def demoAngles(jpath,origin_joint,far_joint,direction):
     xf,yf,cf = getFile(far_joint,jpath)
     i=0
     name_arr = ['demo']    
+    flipperbool=True
     if origin_joint in [5,6,7,12,13,14,19,20,21]:
         print('test1')
         flbool=False
