@@ -1,16 +1,19 @@
 import cv2 as cv
-workingdir = "./framelook/outmasks/"
-#opath = r'C:/Users/Micheal/Openpose/openpose/'
+###########################################################
+## EDIT THIS VARIBLE TO YOUR OPENPOSE FILE PATH          ##
 opath = r'C:/Users/callahanm5/Openpose/openpose/'
+## EDIT THIS VARIABLE TO YOUR FRAMELOOK FILE PATH        ##
+framelookpath = 'C:/Users/callahanm5/source/repos/frameLookdemotest/frameLook/'
+###########################################################
+ 
 opathbin = opath+'bin/OpenPoseDemo.exe'
 outjson_path = opath+'output_jsons'
 opathoutput = opath+'output'
+workingdir = "./framelook/outmasks/"
 
 #framelookpath = 'C:/Users/Micheal/source/repos/frameLook/frameLook/'
-framelookpath = 'C:/Users/callahanm5/source/repos/frameLook/frameLook/'
 
-#bm = cv.imread(workingdir+'blue.jpg')
-#gm = cv.imread(workingdir+'green.jpg')
-#rm = cv.imread(workingdir+'red.jpg')
+
+
 clicklist = []
-#height, width, channels = bm.shape
+

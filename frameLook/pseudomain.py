@@ -328,33 +328,30 @@ def lookThruVid(vidpath,outputpath,iswebcam):
 
 
 
-#runs OP for one motion type and for three different videos.lsrom + flex, rot and abad are video names to process
+##Header name of the File, same name as the folder 'test' created in 'rawimgs'
+file_header = 'demo'
+##True if using a webcam, False if using a video
+IS_WEBCAM = True
+##1 if looking at the right side of the body, 0 if looking at the left
+IS_RIGHT = 1
+
 jointcomplexpath1 = './framelook/romI/'
-routput = 'C:/Users/callahanm5/Openpose/openpose/rawimg/test3/'
+routput = mglob.opath+'rawimg/'+file_header+'/'
 vidpath = './framelook/vid/'
-file = vidpath+'test.mp4'
+vid_file = vidpath+file_header+'.mp4'
 
-#runOP('lsrom','flex')
-#runOP('lsrom','rot')
-#runOP('lsrom','abad')
-lookThruVid(file,routput,True)
-runOPFast('test3')
-#paths to each rom data sets
-#jointcomplexpath = './framelook/rom/rsrom/'
-#jointcomplexpath1 = './framelook/romI/'
+##RUN MODE 1 SnapShots, allows the user to take a picture of themselves and get joint estimation
+##vid_file is irrelevant for this run_mode. 
+##Click on image window and press 's' key to save the current image, name the file 'demo', click on image again and press 'q' to quit
+#lookThruVid(vid_file,routput,IS_WEBCAM)
+runOPFast(file_header)
+angleFast(jointcomplexpath1,file_header)
+
+#IS_WEBCAM = False
+#lookThruVid(vid_file,routput,IS_WEBCAM)
+#runOPFast(file_header)
+#shoulderROMFast(jointcomplexpath1,'test',IS_RIGHT)
 
 
-#print(file)
 
-#imt = pOP.findFrame(file,50)
-#print(imt)
-#cv.imshow('test',imt)
-#key=cv.waitKey(0)
-#print(chr(key))
 
-#takes the reformated OP output, selects a path, joint rom and boolean flipper and autodetects extreme joint angles
-#isright = int(input("1 for Right| 0 for left"))
-isright=0
-angleFast(jointcomplexpath1,'test3')
-#shoulderROMFast(jointcomplexpath1,'test',isright)
-#shoulderROM(jointcomplexpath1,'lsrom',0)

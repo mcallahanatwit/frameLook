@@ -1,13 +1,12 @@
 import json
 import numpy as np
-#path = r"C:/Users\Micheal\Openpose\openpose\output_jsons"
-path = r"C:/Users\callahanm5\Openpose\openpose\output_jsons"
-path2 = r"C:/Users\Micheal\Openpose\openpose\output"
+import myglobal as gl
+
 
 jointindx = ['0Nose','1Neck','2RShoulder','3RElbow','4RWrist','5LShoulder','6LElbow','7LWrist','8MidHip','9RHip','10RKnee','11RAnkle','12LHip','13LKnee','14LAnkle','15REye','16LEye','17REar','18LEar','19LBigToe','20LSmallToe','21LHeel','22RBigToe','23RSmallToe','24RHeel','25Background']
 
 def dataOverTime(startF,endF,jointind,inpath,rom,subrom):
-    outpath1 = 'C:/Users/Micheal/source/repos/frameLook/frameLook/rom'
+    outpath1 = gl.framelookpath+'rom'
     n = jointind
     sname = rom+subrom
     xarr = []
@@ -34,8 +33,8 @@ def dataOverTime(startF,endF,jointind,inpath,rom,subrom):
         json.dump(jsonout,f2)
 
 def dataOverTimeFast(startF,endF,jointind,inpath,rom,isdemo):
-    #outpath1 = 'C:/Users/Micheal/source/repos/frameLook/frameLook/romI'
-    outpath1 = 'C:/Users/callahanm5/source/repos/frameLook/frameLook/romI'
+    
+    outpath1 = gl.framelookpath+'romI'
     n = jointind
     sname = rom
     xarr = []
@@ -56,7 +55,7 @@ def dataOverTimeFast(startF,endF,jointind,inpath,rom,isdemo):
         xarr.append(data['people'][0]['pose_keypoints_2d'][(n*3+0)])
         yarr.append(data['people'][0]['pose_keypoints_2d'][(n*3+1)])
         confidencearr.append(data['people'][0]['pose_keypoints_2d'][(n*3+2)])
-    #print(xarr)
+   
     jsonout['X']= xarr
     jsonout['Y']= yarr
     jsonout['Confidence'] =confidencearr
@@ -70,5 +69,4 @@ def processOverTime(startF,endF,inpath,outpath,rom,subrom,isdemo):
 
 def processOverTimeFast(startF,endF,inpath,rom,isdemo):
     for z in range(0,25):
-        dataOverTimeFast(startF,endF,z,path,rom,isdemo)
-#processOverTime(0,260,path,path2)
+        dataOverTimeFast(startF,endF,z,inpath,rom,isdemo)
