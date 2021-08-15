@@ -176,8 +176,8 @@ def angleFast(dir,foldername):
     demopath = dir+foldername    
     d_out,pair_o,pair_f,pair_gl=pOP.demoAngles(demopath,d_o,d_f,d_d)
     print(pair_o)
-    cv.line(demo_img,pair_f,pair_o,(0,0,0),8)
-    cv.line(demo_img,pair_gl,pair_o,(0,0,0),8)
+    cv.line(demo_img,pair_f,pair_o,(255,150,0),8)
+    cv.line(demo_img,pair_gl,pair_o,(255,150,0),8)
     d_out1 = abs(d_out)
     d_out2 = 2*math.pi - d_out1
     print(2*math.pi)
